@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# e: exit on any error
+set -eu
+
+commit=`git rev-parse ${1:-HEAD}`
+utime=`git show -s --format=%ct $commit`
+from=`date -d @$utime +%Y-%m-01`
+
+
+echo "$commit $from"
+
+count=`git rev-list --count --first-parent --since="$from" $commit`
+prefix=`date -d @$utime +%y%m`
+echo "release-$prefix.$count"
